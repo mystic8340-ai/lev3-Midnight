@@ -364,7 +364,7 @@ Below is the list of assets submitted for evaluation:
 * **GitHub Repository**: [https://github.com/mystic8340-ai/lev3-Midnight.git](https://github.com/mystic8340-ai/lev3-Midnight)
 * **README**: [README.md](README.md)
 * **Proposal**: [PROPOSAL.md](PROPOSAL.md)
-* **Live Demo**: [https://midnight-theta-two.vercel.app/](https://midnight-theta-two.vercel.app/)
+* **Live Demo**: [https://lev3-midnight.vercel.app/](https://lev3-midnight.vercel.app/)
 * **Screenshots & Proof Assets**:
   * **1. Desktop UI**: `desktop_ui.png`
   * **2. Mobile UI**: `mobile_ui.png`
