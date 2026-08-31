@@ -12,8 +12,8 @@ Welcome to **Secret Notes**, a premium, production-grade, privacy-preserving pri
 ---
 
 ## Live Demo & Resources
-- **Demo Video**: [https://drive.google.com/drive/folders/1VdZkEbYkubP3RYzzeJVh_Utx4k1CCuij?usp=sharing](https://drive.google.com/drive/folders/1VdZkEbYkubP3RYzzeJVh_Utx4k1CCuij?usp=sharing)
-- **Live Demo URL**: [https://midnight-theta-two.vercel.app/](https://midnight-theta-two.vercel.app/)
+- **Demo Video**: [Google Drive](https://drive.google.com/file/d/1QrbjERY19RUNyvQBpDMbquUPeGj1yNGo/view?usp=sharing)
+- **Live Demo URL**: [https://lev3-midnight.vercel.app/](https://lev3-midnight.vercel.app/)
 - **GitHub Repository**: [https://github.com/mystic8340-ai/lev3-Midnight](https://github.com/mystic8340-ai/lev3-Midnight)
 
 ---
