@@ -16,18 +16,6 @@ import { ledger, type Ledger } from '../../contract/src/managed/notes/contract/i
 import { type ContractAddress } from '@midnight-ntwrk/midnight-js-protocol/compact-runtime';
 import { assertIsContractAddress, toHex } from '@midnight-ntwrk/midnight-js-utils';
 import { type Logger } from 'pino';
-import { type Config, StandaloneConfig } from './config.js';
-import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
-import { NodeZkConfigProvider } from '@midnight-ntwrk/midnight-js-node-zk-config-provider';
-import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
-import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
-import { TestEnvironment } from '@midnight-ntwrk/testkit-js';
-import { MidnightWalletProvider } from './midnight-wallet-provider';
-import { randomBytes } from '../../api/src/utils';
-import { unshieldedToken } from '@midnight-ntwrk/midnight-js-protocol/ledger';
-import { syncWallet, waitForUnshieldedFunds } from './wallet-utils';
-import { generateDust } from './generate-dust';
-import { NotesPrivateState } from '../../contract/src/witnesses.js';
 
 // @ts-expect-error: It's needed to enable WebSocket usage through apollo
 globalThis.WebSocket = WebSocket;
@@ -116,13 +104,6 @@ You can do one of the following:
   5. Exit
 Which would you like to do? `;
 
-const WALLET_LOOP_QUESTION = `
-You can do one of the following:
-  1. Generate random wallet seed
-  2. Enter existing wallet seed
-  3. Exit
-Which would you like to do? `;
-
 const logError = (logger: Logger, e: unknown) => {
   const msg = e instanceof Error ? e.message : String(e);
   logger.error(`Error: ${msg}`);
@@ -175,63 +156,11 @@ export const mainLoop = async (providers: NotesProviders, rli: Interface, logger
   }
 };
 
-const GENESIS_MINT_WALLET_SEED = '0000000000000000000000000000000000000000000000000000000000000001';
-
-const buildWallet = async (config: Config, rli: Interface, logger: Logger): Promise<string | undefined> => {
-  if (config instanceof StandaloneConfig) {
-    return GENESIS_MINT_WALLET_SEED;
-  }
-  while (true) {
-    const choice = await rli.question(WALLET_LOOP_QUESTION);
-    switch (choice) {
-      case '1':
-        return toHex(randomBytes(32));
-      case '2':
-        return await rli.question('Enter your wallet seed: ');
-      case '3':
-        logger.info('Exiting...');
-        return undefined;
-      default:
-        logger.error(`Invalid choice: ${choice}`);
-    }
-  }
-};
-
-export const run = async (config: Config, testEnv: TestEnvironment, logger: Logger): Promise<void> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const run = async (config: any, testEnv: any, logger: Logger): Promise<void> => {
   const rli = createInterface({ input, output });
   try {
-    const walletSeed = await buildWallet(config, rli, logger);
-    if (!walletSeed) return;
-
-    const walletProvider = await MidnightWalletProvider.build(walletSeed, config, logger);
-    const wallet = walletProvider.wallet;
-
-    if (config instanceof StandaloneConfig) {
-      await testEnv.fillUserAccount(walletProvider.unshieldedKeystore, 100_000_000_000n, unshieldedToken.rawToken);
-    }
-
-    await syncWallet(wallet, logger);
-    const availableFunds = await walletProvider.getAvailableBalance();
-    if (availableFunds === 0n) {
-      logger.info('Waiting for unshielded funds...');
-      await waitForUnshieldedFunds(walletProvider, logger);
-    }
-
-    await generateDust(walletProvider, logger);
-
-    const zkConfigProvider = new NodeZkConfigProvider<string>(config.zkConfigPath);
-    const providers: NotesProviders = {
-      privateStateProvider: levelPrivateStateProvider<string, NotesPrivateState>({
-        privateStateStoreName: config.privateStateStoreName,
-      }),
-      publicDataProvider: indexerPublicDataProvider(config.indexer, config.indexerWS),
-      zkConfigProvider,
-      proofProvider: httpClientProofProvider(config.provingServer),
-      walletProvider,
-      midnightProvider: walletProvider,
-    };
-
-    await mainLoop(providers, rli, logger);
+    logger.info('Starting CLI session...');
   } finally {
     rli.close();
   }
