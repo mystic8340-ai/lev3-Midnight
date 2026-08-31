@@ -312,7 +312,7 @@ graph TD
 
 ## Contract Address
 
-* **Preprod Contract Address**: `0200dbf964f541e1950883f5b2f539b66fd6111e46ce8e6e9551fbdd180114d5dd5b`
+* **Preprod Contract Address**: `31ce882dfc68eaf553ffd7c601cecf36e386b49551c7309ed46458f9664f0de9`
 * **Network**: `Midnight Preprod`
 
 ---

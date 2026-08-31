@@ -253,7 +253,9 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (savedAddress) {
       connectWallet()
         .then((api) => {
-          const savedContract = localStorage.getItem('midnight_contract_address');
+          const savedContract =
+            localStorage.getItem('midnight_contract_address') ||
+            '31ce882dfc68eaf553ffd7c601cecf36e386b49551c7309ed46458f9664f0de9';
           if (savedContract && api) {
             setIsWorking(true);
             getProviders(api)
