@@ -5,6 +5,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import StorageIcon from '@mui/icons-material/Storage';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { Link } from 'react-router-dom';
 import { useWallet } from '../hooks/useWallet';
 import { WalletCard } from '../components/WalletCard';
@@ -14,24 +15,24 @@ export const Home: React.FC = () => {
 
   const features = [
     {
-      icon: <LockIcon sx={{ color: '#6366f1', fontSize: '32px' }} />,
+      icon: <LockIcon sx={{ color: '#38bdf8', fontSize: '36px' }} />,
       title: 'Shielded Notes',
-      description: 'Your notes are encrypted and stored locally. The text never touches the public network.',
+      description: 'Your notes are encrypted client-side. Raw plaintext data is never broadcast to the network.',
     },
     {
-      icon: <ShieldIcon sx={{ color: '#a855f7', fontSize: '32px' }} />,
+      icon: <ShieldIcon sx={{ color: '#c084fc', fontSize: '36px' }} />,
       title: 'Zero-Knowledge Proofs',
-      description: 'Prove ownership, create notes, and update records on-chain without exposing details.',
+      description: 'Prove ownership and execute note operations on-chain without revealing private keys or contents.',
     },
     {
-      icon: <StorageIcon sx={{ color: '#06b6d4', fontSize: '32px' }} />,
+      icon: <StorageIcon sx={{ color: '#2dd4bf', fontSize: '36px' }} />,
       title: 'On-Chain Commitments',
-      description: 'Only cryptographic hash commitments and nullifiers reside on the ledger.',
+      description: 'Only cryptographic hash commitments and nullifiers reside securely on the Midnight ledger.',
     },
   ];
 
   return (
-    <Box sx={{ py: 6, display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <Box sx={{ py: 6, display: 'flex', flexDirection: 'column', gap: 10 }}>
       {/* Hero Section */}
       <Box
         sx={{
@@ -46,52 +47,85 @@ export const Home: React.FC = () => {
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 1,
-              background: 'rgba(99, 102, 241, 0.1)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
-              padding: '6px 16px',
+              gap: 1.2,
+              background: 'rgba(56, 189, 248, 0.08)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              padding: '8px 20px',
               borderRadius: '30px',
-              mb: 3,
+              mb: 3.5,
+              backdropFilter: 'blur(10px)',
             }}
           >
-            <VerifiedUserIcon sx={{ color: '#a5b4fc', fontSize: '16px' }} />
-            <Typography variant="caption" color="#a5b4fc" sx={{ fontWeight: 'bold', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-              Zero-Knowledge Privacy Model
+            <AutoAwesomeIcon sx={{ color: '#38bdf8', fontSize: '18px' }} />
+            <Typography
+              variant="caption"
+              sx={{
+                fontFamily: '"Space Grotesk", sans-serif',
+                color: '#38bdf8',
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+              }}
+            >
+              Zero-Knowledge Architecture
             </Typography>
           </Box>
 
           <Typography
-            variant="h2"
+            variant="h1"
             sx={{
-              fontWeight: 900,
-              lineHeight: 1.1,
-              mb: 3,
-              fontSize: { xs: '2.5rem', md: '4rem' },
-              background: 'linear-gradient(135deg, #fff 30%, #a5b4fc 100%)',
+              fontSize: { xs: '2.75rem', sm: '3.5rem', md: '4.5rem' },
+              lineHeight: 1.08,
+              mb: 3.5,
+              background: 'linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #c084fc 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              letterSpacing: '-1px',
             }}
           >
-            Private Note Management,<br /> Shielded On-Chain Proofs.
+            Private Note Storage,
+            <br /> Shielded On-Chain Proofs.
           </Typography>
 
-          <Typography variant="h6" color="text.secondary" sx={{ fontWeight: '400', mb: 4, lineHeight: 1.6 }}>
-            Secret Notes leverages the privacy-first Midnight network. Write notes that are truly yours—only you hold the keys to decrypt them, while the blockchain secures commitments in zero-knowledge.
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 400,
+              mb: 4.5,
+              lineHeight: 1.7,
+              color: '#94a3b8',
+              maxWidth: '640px',
+              fontSize: '1.1rem',
+            }}
+          >
+            Secret Notes leverages Midnight zero-knowledge smart contracts. Write notes that remain 100% private to you
+            while relying on cryptographic proofs on the ledger.
           </Typography>
 
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2.5 }}>
             {isConnected ? (
               <>
-                <Button variant="contained" color="primary" component={Link} to="/dashboard" endIcon={<ArrowForwardIcon />}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/dashboard"
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{ px: 4, py: 1.5 }}
+                >
                   Go to Dashboard
                 </Button>
-                <Button variant="outlined" component={Link} to="/notes">
+                <Button variant="outlined" color="primary" component={Link} to="/notes" sx={{ px: 4, py: 1.5 }}>
                   Open My Notes
                 </Button>
               </>
             ) : (
-              <Button variant="contained" color="primary" onClick={() => document.getElementById('wallet-card-section')?.scrollIntoView({ behavior: 'smooth' })}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => document.getElementById('wallet-card-section')?.scrollIntoView({ behavior: 'smooth' })}
+                endIcon={<ArrowForwardIcon />}
+                sx={{ px: 4, py: 1.5 }}
+              >
                 Connect Wallet to Start
               </Button>
             )}
@@ -105,11 +139,30 @@ export const Home: React.FC = () => {
 
       {/* Features Grid */}
       <Box>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, textAlign: 'center' }}>
-          App Features
+        <Typography
+          variant="h3"
+          sx={{
+            textAlign: 'center',
+            mb: 1.5,
+            background: 'linear-gradient(90deg, #ffffff 0%, #38bdf8 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
+          Core Protocol Features
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 6, textAlign: 'center', maxWidth: '600px', mx: 'auto' }}>
-          Explore the components that make Secret Notes secure, decentralized, and 100% private.
+        <Typography
+          variant="body1"
+          sx={{
+            mb: 7,
+            textAlign: 'center',
+            maxWidth: '640px',
+            mx: 'auto',
+            color: '#94a3b8',
+            fontSize: '1.05rem',
+          }}
+        >
+          Built upon state-of-the-art Midnight zero-knowledge technology for uncompromised privacy.
         </Typography>
 
         <Box
@@ -120,13 +173,26 @@ export const Home: React.FC = () => {
           }}
         >
           {features.map((feature, idx) => (
-            <Card sx={{ height: '100%' }} key={idx}>
-              <CardContent sx={{ p: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Box>{feature.icon}</Box>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            <Card key={idx} sx={{ p: 1 }}>
+              <CardContent sx={{ p: 4, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                <Box
+                  sx={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '16px',
+                    background: 'rgba(56, 189, 248, 0.06)',
+                    border: '1px solid rgba(56, 189, 248, 0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {feature.icon}
+                </Box>
+                <Typography variant="h5" sx={{ color: '#f8fafc' }}>
                   {feature.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+                <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.7, fontSize: '0.95rem' }}>
                   {feature.description}
                 </Typography>
               </CardContent>
@@ -135,32 +201,53 @@ export const Home: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Privacy Breakdown Section */}
-      <Card sx={{ background: 'rgba(99, 102, 241, 0.03)', borderColor: 'rgba(99, 102, 241, 0.15)' }}>
-        <CardContent sx={{ p: 5 }}>
+      {/* Technical Breakdown Section */}
+      <Card
+        sx={{
+          background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.05) 0%, rgba(192, 132, 252, 0.05) 100%)',
+          borderColor: 'rgba(56, 189, 248, 0.25)',
+          p: 2,
+        }}
+      >
+        <CardContent sx={{ p: 4 }}>
           <Box
             sx={{
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', md: '2.2fr 0.8fr' },
-              gap: 4,
+              gap: 5,
               alignItems: 'center',
             }}
           >
             <Box>
-              <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
-                How Does It Work?
+              <Typography
+                variant="h4"
+                sx={{
+                  mb: 2.5,
+                  background: 'linear-gradient(90deg, #38bdf8 0%, #c084fc 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                How Midnight Privacy Works
               </Typography>
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
-                Unlike public blockchains where your notes and transactions are fully readable by anyone, Midnight executes transaction logic locally on your machine. 
-                When you create a note, your client computes a cryptographic hash commitment of the note content combined with a random salt and your wallet's secret key. 
-                Only this commitment goes on-chain. When you edit or delete it, you generate a ZK proof demonstrating that you know the matching secret key and note content, without revealing them.
+              <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.75, color: '#94a3b8', fontSize: '1.025rem' }}>
+                Midnight executes smart contract logic locally on your client device. When creating a note, your client
+                generates a cryptographic hash commitment of the note content, salt, and private secret key. Only this
+                hash commitment is broadcast to the network. When updating or deleting notes, ZK proofs verify your
+                authorization without disclosing private state.
               </Typography>
-              <Button variant="outlined" color="primary" component={Link} to="/about">
-                Read Technical Privacy Model
+              <Button variant="outlined" color="primary" component={Link} to="/about" startIcon={<VerifiedUserIcon />}>
+                Read Architectural Whitepaper
               </Button>
             </Box>
-            <Box sx={{ textAlign: 'center' }}>
-              <ShieldIcon sx={{ fontSize: '140px', color: 'rgba(99, 102, 241, 0.2)' }} />
+            <Box sx={{ textAlign: 'center', display: { xs: 'none', md: 'block' } }}>
+              <ShieldIcon
+                sx={{
+                  fontSize: '160px',
+                  color: 'rgba(56, 189, 248, 0.15)',
+                  filter: 'drop-shadow(0 0 20px rgba(56, 189, 248, 0.2))',
+                }}
+              />
             </Box>
           </Box>
         </CardContent>

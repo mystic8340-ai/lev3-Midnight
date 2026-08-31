@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Paper, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Alert } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Alert,
+} from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ErrorIcon from '@mui/icons-material/Error';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import { useNotes } from '../hooks/useNotes';
 import { useContract } from '../hooks/useContract';
@@ -17,7 +27,7 @@ import { Note } from '../../../api/src/index';
 export const MyNotes: React.FC = () => {
   const { isConnected } = useWallet();
   const { contractAddress } = useContract();
-  const { notes, createNote, updateNote, deleteNote, isWorking, isGeneratingProof, txHash, txSuccess, error } = useNotes();
+  const { notes, createNote, updateNote, deleteNote, isWorking, isGeneratingProof, txHash, error } = useNotes();
 
   // Modal / Dialog States
   const [createOpen, setCreateOpen] = useState(false);
@@ -96,15 +106,15 @@ export const MyNotes: React.FC = () => {
   if (!isConnected) {
     return (
       <Box sx={{ py: 6 }}>
-        <Paper sx={{ p: 4, textAlign: 'center' }}>
-          <ErrorIcon sx={{ color: '#f59e0b', fontSize: '48px', mb: 2 }} />
-          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+        <Paper sx={{ p: 5, textAlign: 'center', border: '1px solid rgba(244, 63, 94, 0.3)' }}>
+          <ErrorIcon sx={{ color: '#f43f5e', fontSize: '56px', mb: 2 }} />
+          <Typography variant="h5" sx={{ mb: 1.5, color: '#f8fafc' }}>
             Wallet Disconnected
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          <Typography variant="body1" sx={{ mb: 3.5, color: '#94a3b8', maxWidth: '500px', mx: 'auto' }}>
             Please connect your wallet first on the home screen to access your private notes.
           </Typography>
-          <Button variant="contained" component={Link} to="/">
+          <Button variant="contained" color="primary" component={Link} to="/">
             Go to Home
           </Button>
         </Paper>
@@ -115,15 +125,15 @@ export const MyNotes: React.FC = () => {
   if (!contractAddress) {
     return (
       <Box sx={{ py: 6 }}>
-        <Paper sx={{ p: 4, textAlign: 'center' }}>
-          <ErrorIcon sx={{ color: '#ef4444', fontSize: '48px', mb: 2 }} />
-          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
-            No Contract Active
+        <Paper sx={{ p: 5, textAlign: 'center', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+          <ErrorIcon sx={{ color: '#38bdf8', fontSize: '56px', mb: 2 }} />
+          <Typography variant="h5" sx={{ mb: 1.5, color: '#f8fafc' }}>
+            No Active Smart Contract
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          <Typography variant="body1" sx={{ mb: 3.5, color: '#94a3b8', maxWidth: '500px', mx: 'auto' }}>
             A deployed or joined contract instance is required to query note commitments.
           </Typography>
-          <Button variant="contained" component={Link} to="/dashboard">
+          <Button variant="contained" color="primary" component={Link} to="/dashboard">
             Open Dashboard
           </Button>
         </Paper>
@@ -135,43 +145,89 @@ export const MyNotes: React.FC = () => {
     <Box sx={{ py: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
       {/* Loading Spinners */}
       <LoadingSpinner open={isGeneratingProof} message="Generating local ZK proof..." />
-      <LoadingSpinner open={isWorking && !isGeneratingProof} message="Broadcasting transaction to Midnight network..." />
+      <LoadingSpinner
+        open={isWorking && !isGeneratingProof}
+        message="Broadcasting transaction to Midnight network..."
+      />
 
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <DescriptionIcon sx={{ color: '#6366f1', fontSize: '32px' }} />
-          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box
+            sx={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '14px',
+              background: 'linear-gradient(135deg, #38bdf8 0%, #c084fc 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 0 20px rgba(56, 189, 248, 0.35)',
+            }}
+          >
+            <DescriptionIcon sx={{ color: '#070913', fontSize: '26px' }} />
+          </Box>
+          <Typography
+            variant="h3"
+            sx={{
+              background: 'linear-gradient(90deg, #ffffff 0%, #38bdf8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
             My Private Notes
           </Typography>
         </Box>
-        <Button variant="contained" color="primary" onClick={handleCreateOpen} startIcon={<NoteAddIcon />}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleCreateOpen}
+          startIcon={<NoteAddIcon />}
+          sx={{ px: 3, py: 1.2 }}
+        >
           Create Note
         </Button>
       </Box>
 
       {/* Transaction alerts */}
       {txHash && (
-        <Alert severity="info" sx={{ borderRadius: '12px', background: 'rgba(6, 182, 212, 0.05)', border: '1px solid rgba(6,182,212,0.2)' }}>
-          Last Transaction Hash: <span style={{ fontFamily: 'monospace' }}>{txHash}</span>
+        <Alert
+          severity="info"
+          sx={{
+            borderRadius: '14px',
+            background: 'rgba(56, 189, 248, 0.08)',
+            border: '1px solid rgba(56, 189, 248, 0.3)',
+            color: '#38bdf8',
+          }}
+        >
+          Last Transaction Hash:{' '}
+          <span style={{ fontFamily: '"Space Grotesk", monospace', fontWeight: 700 }}>{txHash}</span>
         </Alert>
       )}
 
       {error && (
-        <Alert severity="error" sx={{ borderRadius: '12px' }}>
+        <Alert severity="error" sx={{ borderRadius: '14px' }}>
           {error}
         </Alert>
       )}
 
       {/* Notes Grid */}
       {notes.length === 0 ? (
-        <Paper sx={{ p: 8, textAlign: 'center', background: 'rgba(255,255,255,0.01)', borderStyle: 'dashed' }}>
-          <DescriptionIcon sx={{ color: 'rgba(255,255,255,0.15)', fontSize: '64px', mb: 2 }} />
-          <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.5)', fontWeight: 'bold', mb: 1 }}>
+        <Paper
+          sx={{
+            p: 8,
+            textAlign: 'center',
+            background: 'rgba(15, 23, 42, 0.3)',
+            borderStyle: 'dashed',
+            borderColor: 'rgba(56, 189, 248, 0.2)',
+          }}
+        >
+          <DescriptionIcon sx={{ color: 'rgba(56, 189, 248, 0.25)', fontSize: '72px', mb: 2 }} />
+          <Typography variant="h5" sx={{ color: '#f8fafc', mb: 1 }}>
             No Shielded Notes
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            You haven't created any private notes yet. Tap the button above to construct your first note!
+          <Typography variant="body1" sx={{ color: '#94a3b8', mb: 3.5, maxWidth: '450px', mx: 'auto' }}>
+            You haven&apos;t created any private notes yet. Click the button above to create your first encrypted note!
           </Typography>
         </Paper>
       ) : (
@@ -179,7 +235,7 @@ export const MyNotes: React.FC = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
-            gap: 3,
+            gap: 3.5,
           }}
         >
           {notes.map((note) => (
@@ -191,31 +247,97 @@ export const MyNotes: React.FC = () => {
       )}
 
       {/* CREATE DIALOG */}
-      <Dialog open={createOpen} onClose={() => setCreateOpen(false)} fullWidth maxWidth="sm" slotProps={{ paper: { sx: { background: 'rgba(3, 3, 8, 0.95)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', backdropFilter: 'blur(20px)' } } }}>
+      <Dialog
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        fullWidth
+        maxWidth="sm"
+        slotProps={{
+          paper: {
+            sx: {
+              background: 'rgba(7, 9, 19, 0.95)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              borderRadius: '24px',
+              backdropFilter: 'blur(24px)',
+            },
+          },
+        }}
+      >
         <Box component="form" onSubmit={handleCreateSubmit}>
-          <DialogTitle sx={{ fontWeight: 'bold' }}>Create Private Note</DialogTitle>
+          <DialogTitle sx={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: '1.5rem', color: '#38bdf8' }}>
+            Create Private Note
+          </DialogTitle>
           <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
-            <TextField label="Title" placeholder="e.g. My Private Password" value={title} onChange={(e) => setTitle(e.target.value)} required fullWidth />
-            <TextField label="Content" placeholder="Enter secure content..." value={content} onChange={(e) => setContent(e.target.value)} multiline rows={5} required fullWidth />
+            <TextField
+              label="Title"
+              placeholder="e.g. Secret Seed Phrase / Private Key"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              fullWidth
+            />
+            <TextField
+              label="Content"
+              placeholder="Enter confidential note body..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              multiline
+              rows={5}
+              required
+              fullWidth
+            />
           </DialogContent>
           <DialogActions sx={{ p: 3 }}>
-            <Button onClick={() => setCreateOpen(false)} variant="outlined" color="inherit">Cancel</Button>
-            <Button type="submit" variant="contained" color="primary">Generate ZK Proof & Create</Button>
+            <Button onClick={() => setCreateOpen(false)} variant="outlined" color="primary">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Generate ZK Proof & Create
+            </Button>
           </DialogActions>
         </Box>
       </Dialog>
 
       {/* EDIT DIALOG */}
-      <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth maxWidth="sm" slotProps={{ paper: { sx: { background: 'rgba(3, 3, 8, 0.95)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', backdropFilter: 'blur(20px)' } } }}>
+      <Dialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        fullWidth
+        maxWidth="sm"
+        slotProps={{
+          paper: {
+            sx: {
+              background: 'rgba(7, 9, 19, 0.95)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              borderRadius: '24px',
+              backdropFilter: 'blur(24px)',
+            },
+          },
+        }}
+      >
         <Box component="form" onSubmit={handleEditSubmit}>
-          <DialogTitle sx={{ fontWeight: 'bold' }}>Edit Private Note</DialogTitle>
+          <DialogTitle sx={{ fontFamily: '"Syne", sans-serif', fontWeight: 800, fontSize: '1.5rem', color: '#38bdf8' }}>
+            Edit Private Note
+          </DialogTitle>
           <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
             <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} required fullWidth />
-            <TextField label="Content" value={content} onChange={(e) => setContent(e.target.value)} multiline rows={5} required fullWidth />
+            <TextField
+              label="Content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              multiline
+              rows={5}
+              required
+              fullWidth
+            />
           </DialogContent>
           <DialogActions sx={{ p: 3 }}>
-            <Button onClick={() => setEditOpen(false)} variant="outlined" color="inherit">Cancel</Button>
-            <Button type="submit" variant="contained" color="primary">Prove & Update</Button>
+            <Button onClick={() => setEditOpen(false)} variant="outlined" color="primary">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Prove & Update
+            </Button>
           </DialogActions>
         </Box>
       </Dialog>
