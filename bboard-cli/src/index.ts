@@ -158,6 +158,7 @@ export const mainLoop = async (providers: NotesProviders, rli: Interface, logger
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const run = async (config: any, testEnv: any, logger: Logger): Promise<void> => {
+  await Promise.resolve();
   const rli = createInterface({ input, output });
   try {
     logger.info('Starting CLI session...');
