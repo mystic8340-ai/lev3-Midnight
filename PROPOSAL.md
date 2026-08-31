@@ -1,109 +1,83 @@
-# Product Proposal: Midnight Private Voting
+# Product Proposal: Secret Notes DApp on Midnight Network
 
 ## 1. Problem Statement
 
-Traditional online voting systems force a compromise between voter privacy and tally verifiability. 
+Traditional note-taking applications and cloud storage providers force a compromise between accessibility and privacy.
 
-In centralized systems, administrators control the database containing both the voter list and the cast ballots. This creates a single point of failure where database leaks, insider threats, or server compromises can link specific votes back to individual voters. 
+In centralized cloud services (e.g. Google Keep, Notion, Evernote), third-party providers store unencrypted or server-side encrypted note text in centralized databases. This creates single points of failure where server breaches, sub-poenas, insider threats, or automated data mining can expose sensitive personal notes, private keys, password drafts, or confidential research.
 
-On public, non-private blockchains, the ledger is completely transparent. While this solves the trust problem and makes tallies publicly verifiable, it compromises privacy because all transaction payloads and sender addresses are visible. Observers can easily correlate a voter's public wallet address with their vote option. This transparency exposes voters to:
-* **Targeted Retribution & Coercion**: Authorities, employers, or community members can penalize individuals for voting against their interests.
-* **Tracking Correlation**: Aggregated voting records allow observers to build profiles of users' political, economic, or corporate preferences.
-* **Censorship**: Malicious nodes or network entities can selectively censor transactions containing vote selections they oppose.
+On transparent, public blockchains, data is globally visible. If a user stores note content or metadata on-chain, observers can easily correlate the user's wallet address with their private documents, exposing them to:
+* **Targeted Retribution & Exploitation**: Financial details or sensitive drafts exposed on-chain can lead to targeted phishing or extortion.
+* **Identity & Behavior Tracking**: Aggregated public records allow observers to profile user activities and private assets.
 
 ---
 
 ## 2. Proposed Solution
 
-**Midnight Private Voting** solves the online voting dilemma by combining blockchain transparency with zero-knowledge (ZK) cryptography. 
+**Secret Notes DApp** solves the data privacy dilemma by combining zero-knowledge (ZK) cryptography with decentralized blockchain consensus on the **Midnight Network**.
 
-Built on the **Midnight Network**, the application utilizes **Compact** smart contracts to run local ZK circuits directly in the voter’s browser. This architecture decouples the voter's public blockchain address from their ballot. 
+Built on the **Midnight Network**, the application utilizes **Compact** smart contracts to run local ZK circuits directly inside the user's browser. This architecture completely isolates private note content from the public ledger:
 
-Voters generate a local cryptographic proof of eligibility and a deterministic **nullifier** in their browser. The nullifier acts as an anonymous tracking ID: it proves that this specific voter has cast a ballot in this specific election, but it hides *who* the voter is. 
-
-The blockchain validates the ZK proof and verifies that the nullifier has not been used before. If valid, the contract registers the nullifier on the public ledger to prevent double voting and increments the public tally. This guarantees:
-1. **Absolute Anonymity**: The ballot is logged without any link to the sender's shielded or unshielded wallet address.
-2. **Public Verifiability**: Anyone can verify that the tallies are correct by counting the votes and verifying that every vote was accompanied by a valid ZK proof.
-3. **Double-Voting Prevention**: The deterministic nullifier prevents any voter from casting more than one ballot.
+1. **Local Private State**: Note titles, text content, and cryptographic salts are stored exclusively in local browser memory and encrypted local storage.
+2. **Zero-Knowledge Circuit Execution**: The client browser computes ZK proofs verifying that note creation, modification, and deletion follow smart contract rules without exposing note plaintexts.
+3. **On-Chain Commitment & Nullifier Ledger**: The Midnight ledger records only 32-byte cryptographic commitments (`sha256(title || content)`) and deterministic nullifiers (`hash("note:nullifier", id, sk)`). This guarantees:
+   * **Absolute Note Confidentiality**: Note contents and titles are never transmitted or stored on-chain.
+   * **Verifiable State Transitions**: Observers and node operators can verify that note operations are authentic and authorized without learning what the note contains.
+   * **Double-Spending & Replay Prevention**: Deterministic nullifiers prevent unauthorized updates or replay attacks.
 
 ---
 
 ## 3. Target Users
 
-The dApp is designed to support governance in environments where anonymity is required to ensure free and fair outcomes:
-
-* **DAOs (Decentralized Autonomous Organizations)**: For treasury allocation, feature prioritization, or protocol changes where participants wish to hide their voting power or choices.
-* **Universities & Student Elections**: For student government, union voting, and academic senate elections.
-* **Corporate Governance**: For anonymous board room votes, shareholder ballots, and corporate policy adjustments.
-* **Community & Municipal Governance**: For local neighborhood associations, non-profits, or civic groups voting on proposals.
-* **Developer & Project Teams**: For prioritize-ranking features or voting on consensus rules.
+The Secret Notes DApp is designed for users needing verifiable, private storage:
+* **Web3 Professionals & Researchers**: Storing sensitive research notes, API keys, seed phrase backups, or strategic drafts securely.
+* **Journalists & Whistleblowers**: Writing private logs and investigation notes without risking cloud database leaks.
+* **DAOs & Executives**: Drafting confidential proposals or financial strategies prior to public disclosure.
+* **Privacy-Conscious Everyday Users**: Maintaining a personal digital notebook secured by state-of-the-art ZK cryptography.
 
 ---
 
 ## 4. Core Features
 
-* **Anonymous Voting**: Ballots are registered without exposing the voter's shielded coin key or public wallet address.
-* **One Vote Per Participant**: Enforced cryptographically by requiring a valid ZK proof of secret key ownership.
-* **Double-Voting Prevention**: The ledger keeps an immutable set of consumed nullifiers, rejecting any transaction presenting a nullifier that is already marked as voted.
-* **Public Vote Tally**: Displays real-time accumulators for Option A (Yes) and Option B (No) dynamically on the ledger.
-* **Wallet Authentication**: Seamless integration with the **Lace Wallet** extension to manage network fee balancing and proof transaction submission.
-* **confidential Setup**: Administrators can initialize polls with custom descriptions, generating a unique poll ID that isolates voter nullifiers across different elections.
+* **Full Private CRUD Operations**: Create, Read, Update, and Delete notes seamlessly with client-side ZK proof generation.
+* **Lace Wallet Integration**: Connect and disconnect the Midnight Lace Wallet for gas fee balancing and proof transaction submission on Preprod.
+* **Observable Privacy Model**: Mathematical proof of note validity without revealing note plaintexts or user identities.
+* **Persistent Local Private State**: Encrypted local storage cache linked to contract instance keys.
+* **Contract Deployment & Joining**: Deploy custom notes contracts or join existing contract instances on Preprod.
 
 ---
 
-## 5. Privacy Model
+## 5. Privacy Model: What an Observer Can and Cannot Learn
 
-The application operates on a zero-knowledge paradigm, dividing all system data into public and private scopes:
-
-| Ledger State (PUBLIC) | Client State (PRIVATE) |
-| :--- | :--- |
-| **Poll Description**: The poll question or description. | **Voter Mnemonics & Master Seeds**: Maintained securely inside the Lace Wallet extension. |
-| **Poll ID**: Unique salt generated at deployment. | **localSecretKey**: Secret key used to calculate the nullifier and ZK proof. |
-| **Tally Counters**: Public vote counters (`tallyA` and `tallyB`). | **Vote Choice**: The selected option before it is submitted. |
-| **Voted Nullifiers**: Cryptographic hash registry proving eligibility. | **Intermediate Witnesses**: Local variables calculated during proving. |
+| Data Element | Observer Can Learn? | Explanation |
+| :--- | :--- | :--- |
+| **Note Title & Content** | ❌ **No** | Stored exclusively in local browser state; never sent across network or chain. |
+| **User Secret Key (`sk`)** | ❌ **No** | Kept inside client private state provider. |
+| **Note Commitment (`sha256`)** | ✅ **Yes** | 32-byte hash stored on-chain to verify note existence cryptographically. |
+| **Note Nullifier** | ✅ **Yes** | 32-byte hash marked on-chain when a note is edited or deleted to prevent double-spending. |
+| **Transaction Validity** | ✅ **Yes** | ZK proof verifies state rules were followed without revealing underlying note parameters. |
 
 ---
 
 ## 6. Technical Architecture
 
-The following diagram outlines the system architecture:
-
 ```mermaid
 graph TD
-    User([Voter Interface]) -->|1. Selects Vote| UI[React + Vite Frontend]
-    UI -->|2. Requests Private Key| Wallet[Lace Wallet Extension]
-    Wallet -.->|3. Returns Shielded Key| UI
-    UI -->|4. Generates ZK Proof| Prover[Local Prover Engine]
-    Prover -->|5. Computes Nullifier| UI
-    UI -->|6. Balances Transaction| Wallet
-    UI -->|7. Submits Tx Payload| Node[Midnight Preprod Node]
-    Node -->|8. Validates Proof & Tallies| Ledger[(On-Chain Ledger State)]
+    User([User Interface]) -->|1. Create / Edit Note| UI[React + MUI Frontend]
+    UI -->|2. Request Shielded Key| Wallet[Midnight Lace Wallet]
+    Wallet -.->|3. Return Shielded Key| UI
+    UI -->|4. Generate ZK Proof| Prover[Client-Side WASM Prover]
+    Prover -->|5. Compute Commitment & Nullifier| UI
+    UI -->|6. Balance Transaction| Wallet
+    UI -->|7. Submit Payload| Node[Midnight Preprod Node]
+    Node -->|8. Validate Proof & Commitments| Ledger[(Compact On-Chain State)]
 ```
 
-### Components:
-1. **Frontend (React + Vite)**: Renders the user-facing dashboard, aggregates transaction statuses, handles poll deployment inputs, and triggers the local ZK prover.
-2. **API Layer (Midnight.js)**: Off-chain TypeScript client wrapping the compiled contract. It maps state observables, queries the indexer, and compiles transactions.
-3. **Compact Smart Contract**: Written in Compact and compiled to Wasm/circuits. Defines ledger variables, asserts nullifier uniqueness, and increments tally counters.
-4. **Midnight Network**: The Layer-1 ledger that validates the generated zero-knowledge proofs and updates public states.
-5. **Lace Wallet**: Browser wallet extension providing shielded keys and signing transactions for network gas fees.
-
 ---
 
-## 7. Future Improvements
+## 7. Submission Verification Assets
 
-To prepare the application for production deployment, the following features are planned:
-* **Multi-Candidate Voting**: Expand the binary Choice enum to support an arbitrary list of candidates or rank-choice selections.
-* **Timed Elections**: Introduce block height checks to open and close voting windows automatically without administrator intervention.
-* **Election Closing & Tally Reveal**: Keep tallies encrypted on-chain until the election period ends, revealing only the final tally at closing to prevent bandwagon effects.
-* **Admin Dashboard**: A premium panel for organizers to manage multiple active polls, register voter white-lists, and export verified outcomes.
-* **Encrypted Result Export**: Enable exporting audit trails where observers can verify individual votes anonymously.
-
----
-
-## 8. Conclusion
-
-The Midnight Network provides the ideal foundation for privacy-preserving voting. 
-
-By enabling client-side zero-knowledge proof generation and exposing a type-safe contract programming language (Compact), Midnight makes it possible to build anonymous voting portals that require zero trust in centralized database hosts. 
-
-Voters retain absolute control over their identity and voting choices, while the public blockchain guarantees that the final outcomes are mathematically verifiable, tamper-proof, and audit-compliant.
+* **Public GitHub Repository**: [https://github.com/mystic8340-ai/lev3-Midnight](https://github.com/mystic8340-ai/lev3-Midnight)
+* **Live Demo URL**: [https://lev3-midnight.vercel.app](https://lev3-midnight.vercel.app)
+* **Preprod Contract Address**: `31ce882dfc68eaf553ffd7c601cecf36e386b49551c7309ed46458f9664f0de9`
+* **Demo Video**: [Google Drive Walkthrough](https://drive.google.com/drive/folders/1VdZkEbYkubP3RYzzeJVh_Utx4k1CCuij?usp=sharing)
