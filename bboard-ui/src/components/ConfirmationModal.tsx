@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import { Box } from '@mui/material';
 
 interface ConfirmationModalProps {
   open: boolean;

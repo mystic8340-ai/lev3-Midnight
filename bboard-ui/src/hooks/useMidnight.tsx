@@ -24,7 +24,6 @@ import {
   TransactionId,
 } from '@midnight-ntwrk/midnight-js-protocol/ledger';
 import type { UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';
-import * as utils from '../../../api/src/utils/index';
 import { WalletService } from '../services/wallet.service';
 import { NetworkService } from '../services/network.service';
 
@@ -108,9 +107,10 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       localStorage.setItem('midnight_wallet_address', shieldedAddresses.shieldedCoinPublicKey);
       localStorage.setItem('midnight_network', targetNetwork);
       return api;
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Unknown wallet connection error';
       setConnectionStatus('disconnected');
-      setWalletError(err.message || 'Unknown wallet connection error');
+      setWalletError(msg);
       logger.error(err, 'Failed to connect wallet');
       throw err;
     }
@@ -283,9 +283,10 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       next: (state) => {
         setNotesState(state);
       },
-      error: (err) => {
+      error: (err: unknown) => {
+        const msg = err instanceof Error ? err.message : String(err);
         logger.error(err, 'Contract state stream error');
-        setTxError(err.message || String(err));
+        setTxError(msg);
       },
     });
 

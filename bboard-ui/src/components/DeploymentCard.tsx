@@ -9,7 +9,7 @@ import { useWallet } from '../hooks/useWallet';
 
 export const DeploymentCard: React.FC = () => {
   const { isConnected } = useWallet();
-  const { deploy, isDeploying, contractAddress: deployedAddr, txHash, txSuccess, error: deployError } = useDeployment();
+  const { deploy, isDeploying, txHash, txSuccess, error: deployError } = useDeployment();
   const { contractAddress: activeAddr, joinContract, isWorking: isJoining, error: joinError } = useContract();
   const [joinAddress, setJoinAddress] = React.useState('');
 
