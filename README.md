@@ -296,18 +296,17 @@ graph TD
 
 ### Application Screenshots
 
-* **Home Screen**:
-  ![Home Screen](banner.png)
+* **1. Desktop UI**:
+  ![Desktop UI](desktop_ui.png)
 
-* **Test Results**:
-  ![Test Results](test.png)
+* **2. Mobile UI**:
+  ![Mobile UI](mobile_ui.png)
 
-* **CI/CD Verification**:
+* **3. CI/CD & Deployment Verification**:
   ![CI/CD Verification](cicd.png)
 
-### Project Demo Video
-
-* **Video Walkthrough**: *[Placeholder: media/demo_walkthrough.mp4]*
+* **4. Smart Contract Unit Tests**:
+  ![Contract Unit Tests](testcases.png)
 
 ---
 
@@ -366,6 +365,8 @@ Below is the list of assets submitted for evaluation:
 * **README**: [README.md](README.md)
 * **Proposal**: [PROPOSAL.md](PROPOSAL.md)
 * **Live Demo**: [https://midnight-theta-two.vercel.app/](https://midnight-theta-two.vercel.app/)
-* **CI/CD Build Screenshot**: `cicd.png`
-* **App Screens**:
-  * Home Screen: `banner.png`
+* **Screenshots & Proof Assets**:
+  * **1. Desktop UI**: `desktop_ui.png`
+  * **2. Mobile UI**: `mobile_ui.png`
+  * **3. CI/CD Checks**: `cicd.png`
+  * **4. Contract Unit Tests**: `testcases.png`
