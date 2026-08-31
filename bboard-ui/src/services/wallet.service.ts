@@ -30,13 +30,14 @@ export class WalletService {
 
     try {
       return await wallet.connect(targetNetwork);
-    } catch (err: any) {
-      if (err.message && err.message.toLowerCase().includes('network')) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : '';
+      if (msg && msg.toLowerCase().includes('network')) {
         throw new Error(
           `Network Mismatch: Please check your 1AM Wallet configuration and ensure network is set to ${targetNetwork}.`,
         );
       }
-      throw new Error(err.message || '1AM Wallet connection was rejected or failed.');
+      throw new Error(msg || '1AM Wallet connection was rejected or failed.');
     }
   }
 }

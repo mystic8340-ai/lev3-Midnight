@@ -160,7 +160,8 @@ export const About: React.FC = () => {
               Local ZK Proofs
             </Typography>
             <Typography variant="body2" sx={{ color: '#94a3b8', lineHeight: 1.7, fontSize: '0.95rem' }}>
-              Proofs are compiled and executed inside the user&apos;s browser using Midnight&apos;s WASM-compiled client-side prover. Your wallet signs transaction bindings and submits them to the network.
+              Proofs are compiled and executed inside the user&apos;s browser using Midnight&apos;s WASM-compiled
+              client-side prover. Your wallet signs transaction bindings and submits them to the network.
             </Typography>
           </CardContent>
         </Card>

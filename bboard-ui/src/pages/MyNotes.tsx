@@ -63,8 +63,9 @@ export const MyNotes: React.FC = () => {
     try {
       await createNote(title.trim(), content.trim());
       handleShowToast('Private Note created successfully! Commitment stored on-chain.', 'success');
-    } catch (err: any) {
-      handleShowToast(err.message || 'Failed to create note.', 'error');
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : 'Failed to create note.';
+      handleShowToast(errMsg, 'error');
     }
   };
 
@@ -82,8 +83,9 @@ export const MyNotes: React.FC = () => {
     try {
       await updateNote(activeNote.id, title.trim(), content.trim());
       handleShowToast('Private Note updated! New commitment stored, old commitment nullified.', 'success');
-    } catch (err: any) {
-      handleShowToast(err.message || 'Failed to update note.', 'error');
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : 'Failed to update note.';
+      handleShowToast(errMsg, 'error');
     }
   };
 
@@ -98,8 +100,9 @@ export const MyNotes: React.FC = () => {
     try {
       await deleteNote(activeNote.id);
       handleShowToast('Private Note deleted! On-chain commitment nullified.', 'success');
-    } catch (err: any) {
-      handleShowToast(err.message || 'Failed to delete note.', 'error');
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : 'Failed to delete note.';
+      handleShowToast(errMsg, 'error');
     }
   };
 

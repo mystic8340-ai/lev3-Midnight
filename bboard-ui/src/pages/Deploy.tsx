@@ -39,8 +39,8 @@ export const Deploy: React.FC = () => {
             want to reuse the ledger maps.
             <br />
             <br />
-            Alternatively, if you already have a contract address, you can input it in the &quot;Join&quot; form on the dashboard
-            or deployment card to continue your session.
+            Alternatively, if you already have a contract address, you can input it in the &quot;Join&quot; form on the
+            dashboard or deployment card to continue your session.
           </Typography>
         </Paper>
       </Box>

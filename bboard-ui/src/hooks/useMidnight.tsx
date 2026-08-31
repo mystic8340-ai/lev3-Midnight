@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { type ContractAddress, toHex, fromHex } from '@midnight-ntwrk/midnight-js-protocol/compact-runtime';
+import { toHex, fromHex } from '@midnight-ntwrk/midnight-js-protocol/compact-runtime';
 import {
   type NotesDerivedState,
   type DeployedNotesAPI,
@@ -7,13 +7,12 @@ import {
   type NotesProviders,
   type NotesCircuitKeys,
 } from '../../../api/src/index';
-import { ConnectedAPI, type InitialAPI } from '@midnight-ntwrk/dapp-connector-api';
+import { ConnectedAPI } from '@midnight-ntwrk/dapp-connector-api';
 import { FetchZkConfigProvider } from '@midnight-ntwrk/midnight-js-fetch-zk-config-provider';
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
 import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-public-data-provider';
 import { inMemoryPrivateStateProvider } from '../in-memory-private-state-provider';
-import { NotesPrivateState, createNotesPrivateState } from '../../../contract/src/witnesses';
-import { notesPrivateStateKey } from '../../../api/src/common-types';
+import { NotesPrivateState } from '../../../contract/src/witnesses';
 import { NetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import { logger } from '../main';
 import {
@@ -151,8 +150,8 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const stored = localStorage.getItem(`midnight_private_state_${address}_${key}`);
       if (stored) {
         try {
-          const parsed = JSON.parse(stored);
-          const state = {
+          const parsed = JSON.parse(stored) as { secretKey: string; notes?: Record<string, unknown> };
+          const state: NotesPrivateState = {
             secretKey: fromHex(parsed.secretKey),
             notes: parsed.notes,
           };
@@ -237,8 +236,9 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setDeployedAPI(api);
         setContractAddress(api.deployedContractAddress);
         localStorage.setItem('midnight_contract_address', api.deployedContractAddress);
-      } catch (err: any) {
-        setTxError(err.message || 'Error deploying/joining contract');
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Error deploying/joining contract';
+        setTxError(msg);
         throw err;
       } finally {
         setIsWorking(false);
@@ -305,9 +305,10 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         await deployedAPI.createNote(title, content);
         setTxSuccess(true);
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Transaction failed during circuit call';
         setTxSuccess(false);
-        setTxError(err.message || 'Transaction failed during circuit call');
+        setTxError(msg);
         throw err;
       } finally {
         setIsWorking(false);
@@ -327,9 +328,10 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         await deployedAPI.updateNote(idHex, title, content);
         setTxSuccess(true);
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Transaction failed during circuit call';
         setTxSuccess(false);
-        setTxError(err.message || 'Transaction failed during circuit call');
+        setTxError(msg);
         throw err;
       } finally {
         setIsWorking(false);
@@ -349,9 +351,10 @@ export const MidnightProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         await deployedAPI.deleteNote(idHex);
         setTxSuccess(true);
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Transaction failed during circuit call';
         setTxSuccess(false);
-        setTxError(err.message || 'Transaction failed during circuit call');
+        setTxError(msg);
         throw err;
       } finally {
         setIsWorking(false);
