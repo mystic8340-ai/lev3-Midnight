@@ -14,7 +14,7 @@ Welcome to **Secret Notes**, a premium, production-grade, privacy-preserving pri
 ## Live Demo & Resources
 - **Demo Video**: [https://drive.google.com/drive/folders/1VdZkEbYkubP3RYzzeJVh_Utx4k1CCuij?usp=sharing](https://drive.google.com/drive/folders/1VdZkEbYkubP3RYzzeJVh_Utx4k1CCuij?usp=sharing)
 - **Live Demo URL**: [https://midnight-theta-two.vercel.app/](https://midnight-theta-two.vercel.app/)
-- **GitHub Repository**: [https://github.com/sylvia-barick/midnight](https://github.com/sylvia-barick/midnight)
+- **GitHub Repository**: [https://github.com/mystic8340-ai/lev3-Midnight](https://github.com/mystic8340-ai/lev3-Midnight)
 
 ---
 
@@ -167,7 +167,7 @@ sequenceDiagram
 
 ## 5. ZK Smart Contract Constraints
 
-The [notes.compact](file:///Ubuntu-22.04/home/sylvia/level2/contract/src/notes.compact) smart contract enforces the following zero-knowledge assertions during state execution:
+The [`notes.compact`](contract/src/notes.compact) smart contract enforces the following zero-knowledge assertions during state execution:
 
 1. **Ownership Constraint**: In `updateNote` and `deleteNote` circuits, the client must prove knowledge of the wallet secret key `sk` that matches the salt and hash of the original commitment.
 2. **Double-Spend Prevention**: The contract checks the deterministic `nullifiers` ledger map. If the nullifier already exists, the transaction fails immediately.
@@ -361,10 +361,10 @@ Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for detai
 
 ## 19. Submission Assets
 
-Below is the list of assets submitted for Level 2 evaluation:
-* **GitHub Repository**: [https://github.com/sylvia-barick/midnight.git](https://github.com/sylvia-barick/midnight)
-* **README**: [README.md](file:///Ubuntu-22.04/home/sylvia/midnight/README.md)
-* **Proposal**: [PROPOSAL.md](file:///Ubuntu-22.04/home/sylvia/midnight/PROPOSAL.md)
+Below is the list of assets submitted for evaluation:
+* **GitHub Repository**: [https://github.com/mystic8340-ai/lev3-Midnight.git](https://github.com/mystic8340-ai/lev3-Midnight)
+* **README**: [README.md](README.md)
+* **Proposal**: [PROPOSAL.md](PROPOSAL.md)
 * **Live Demo**: [https://midnight-theta-two.vercel.app/](https://midnight-theta-two.vercel.app/)
 * **CI/CD Build Screenshot**: `cicd.png`
 * **App Screens**:
